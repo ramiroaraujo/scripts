@@ -7,15 +7,13 @@ export PATH=$PATH:/usr/local/bin
 # startup a "default" session if none currently exists
 tmux has-session -t default || tmux new-session -s default -d
 
-# order sessions, so that default session is always first
+# order sessions, so that order is default, new session, zsh, and then another existent sessions
 IFS='|||'
 read -a sessions <<< "$(tmux list-sessions -F "#S" | tr '\n' '|||')"
-options=(default)
+options=(default 'new session' zsh)
 for i in "${sessions[@]}"; do :
    if [[ ${i} != "default" ]]; then options=("${options[@]}" "$i"); fi
 done
-options=("${options[@]}" "new session" "zsh")
-
 
 # present menu for user to choose which workspace to open
 PS3="Please choose your session: "
